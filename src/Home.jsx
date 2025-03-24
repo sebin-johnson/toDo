@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
+import { toast, ToastContainer, Bounce } from 'react-toastify';
 
 const Home = () => {
     const [todo, setTodo] = useState("");
     const [date, setDate] = useState("");
     const [todoList, setTodoList] = useState([]);
-
     const addTodo = () => {
-        if (todo.trim() !== "" && date !== "") {
+        if (!todo || !date) {
+            toast.warning('Please enter a task!')
+        } else {
             setTodoList([...todoList, { text: todo, date }]);
             setTodo("");
             setDate("");
         }
-    };
-
+    }
     const deleteTodo = (index) => {
         setTodoList(todoList.filter((_, i) => i !== index));
     };
-
+    
     return (
         <>
             <div
@@ -30,32 +31,45 @@ const Home = () => {
                             className="form-control"
                             placeholder="Enter task..."
                             value={todo}
-                            onChange={(e) => setTodo(e.target.value)}
+                            onChange={(e) => { setTodo(e.target.value) }}
                         />
                         <input
                             type="date"
                             className="form-control"
                             value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) => { setDate(e.target.value) }}
                         />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <button className="btn btn-primary w-25 mb-3 mt-2" onClick={addTodo}>Add ToDo</button>
+                        <button className="btn btn-primary w-25 mb-3 mt-2" onClick={() => { addTodo() }}>Add ToDo</button>
                     </div>
                     <ul className="list-group">
-                        {todoList.map((task, index) => (
-                            <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{task.text}</strong>
-                                    <br />
-                                    <small className="text-muted">Due: {task.date}</small>
-                                </div>
-                                <button className="btn btn-danger btn-sm" onClick={() => deleteTodo(index)}>Delete</button>
-                            </li>
-                        ))}
+                        {
+                            todoList.map((task, index) => (
+                                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{task.text}</strong>
+                                        <br />
+                                        <small className="text-muted">Due: {task.date}</small>
+                                    </div>
+                                    <button className="btn btn-danger btn-sm" onClick={() => deleteTodo(index)}>Delete</button>
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+            />
         </>
     );
 };

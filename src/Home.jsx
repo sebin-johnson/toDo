@@ -12,10 +12,12 @@ const Home = () => {
             setTodoList([...todoList, { text: todo, date }]);
             setTodo("");
             setDate("");
+            toast.success('Task added')
         }
     }
     const deleteTodo = (index) => {
-        setTodoList(todoList.filter((_, i) => i !== index));
+        setTodoList(todoList.filter((_, i) => i !== index))
+        toast.success('Task removed')
     };
     
     return (
